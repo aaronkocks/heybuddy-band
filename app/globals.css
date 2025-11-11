@@ -9,7 +9,6 @@
 }
 
 @layer components {
-  /* Early 2000s Y2K aesthetic styles */
   .y2k-gradient {
     background: linear-gradient(135deg, #2196f3 0%, #90caf8 100%);
   }

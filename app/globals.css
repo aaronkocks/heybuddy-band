@@ -1,26 +1,35 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-black text-white;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Early 2000s Y2K aesthetic styles */
+  .y2k-gradient {
+    background: linear-gradient(135deg, #2196f3 0%, #90caf8 100%);
+  }
+
+  .y2k-text-shadow {
+    text-shadow: 2px 2px 4px rgba(33, 150, 243, 0.5),
+      -1px -1px 2px rgba(144, 202, 248, 0.3);
+  }
+
+  .y2k-glow {
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.4),
+      0 0 40px rgba(33, 150, 243, 0.2);
+  }
+
+  .y2k-button {
+    @apply bg-gradient-to-r from-primary to-primary-light text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .y2k-card {
+    @apply bg-gradient-to-br from-primary-dark/20 to-primary/10 border-2 border-primary/30 rounded-xl p-6 backdrop-blur-sm;
+  }
 }

@@ -1,26 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Music, Instagram, Facebook, Twitter, Youtube } from "lucide-react";
+import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
 
 const socialLinks = [
   {
     name: "Instagram",
-    url: "https://instagram.com/heybuddyband",
+    url: "https://www.instagram.com/heybuddybandofficial?igsh=MTg4bGR1MGthOXRndw%3D%3D&utm_source=qr",
     icon: Instagram,
   },
   {
     name: "Facebook",
-    url: "https://facebook.com/heybuddyband",
+    url: "https://www.facebook.com/profile.php?id=61574847599501",
     icon: Facebook,
   },
   { name: "Twitter", url: "https://twitter.com/heybuddyband", icon: Twitter },
-  { name: "YouTube", url: "https://youtube.com/@heybuddyband", icon: Youtube },
-  {
-    name: "Spotify",
-    url: "https://open.spotify.com/artist/heybuddy",
-    icon: Music,
-  },
+  { name: "YouTube", url: "https://www.youtube.com/@heybuddyband", icon: Youtube },
 ];
 
 export default function Navbar() {

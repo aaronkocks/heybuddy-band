@@ -1,25 +1,63 @@
 import { supabaseAdmin, Show } from "@/lib/supabase";
 
-async function getShows() {
-  const { data: shows, error } = await supabaseAdmin
-    .from("shows")
-    .select("*")
-    .order("date", { ascending: true });
+const STATIC_PAST_SHOWS: Show[] = [
+  {
+    id: "past-1",
+    date: "2024-09-08T20:00:00",
+    venue: "Huntertown",
+    city: "Huntertown",
+    state: "IN",
+    created_at: "",
+  },
+  {
+    id: "past-2",
+    date: "2025-03-29T20:00:00",
+    venue: "Fort Wayne",
+    city: "Fort Wayne",
+    state: "IN",
+    created_at: "",
+  },
+  {
+    id: "past-3",
+    date: "2025-08-31T20:00:00",
+    venue: "North Manchester",
+    city: "North Manchester",
+    state: "IN",
+    created_at: "",
+  },
+];
 
-  if (error) {
-    console.error("Error fetching shows:", error);
+async function getShows(): Promise<Show[]> {
+  try {
+    const { data: shows, error } = await supabaseAdmin
+      .from("shows")
+      .select("*")
+      .order("date", { ascending: true });
+
+    if (error) {
+      console.error("Error fetching shows:", error);
+      return [];
+    }
+
+    return (shows ?? []) as Show[];
+  } catch (e) {
+    // Supabase unreachable (missing env, network, etc.) — use static shows only
     return [];
   }
-
-  return shows as Show[];
 }
 
 export default async function ShowsPage() {
-  const shows = await getShows();
+  const dbShows = await getShows();
   const now = new Date();
 
-  const upcomingShows = shows.filter((show) => new Date(show.date) >= now);
-  const pastShows = shows.filter((show) => new Date(show.date) < now);
+  const allShows = [...dbShows, ...STATIC_PAST_SHOWS].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  const upcomingShows = allShows.filter((show) => new Date(show.date) >= now);
+  const pastShows = allShows
+    .filter((show) => new Date(show.date) < now)
+    .reverse();
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -40,13 +78,13 @@ export default async function ShowsPage() {
           </div>
         ) : (
           <p className="text-gray-400">
-            No upcoming shows scheduled. Check back soon!
+            More dates coming soon—stay tuned!
           </p>
         )}
       </section>
 
       {/* Past Shows */}
-      <section>
+      <section className="mb-16">
         <h2 className="text-3xl font-bold mb-6 text-primary-light">
           Past Shows
         </h2>
@@ -59,6 +97,23 @@ export default async function ShowsPage() {
         ) : (
           <p className="text-gray-400">No past shows yet.</p>
         )}
+      </section>
+
+      {/* Concert footage */}
+      <section>
+        <h2 className="text-3xl font-bold mb-6 text-primary">
+          Concert footage
+        </h2>
+        <div className="max-w-3xl mx-auto aspect-video rounded-xl overflow-hidden y2k-card">
+          <iframe
+            src="https://www.youtube.com/embed/Z3nt7eu3CCM?si=qBrHNCniuFHNj7QZ"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
       </section>
     </div>
   );

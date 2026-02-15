@@ -3,13 +3,13 @@ import Image from "next/image";
 const members = [
   {
     name: "Jason",
-    role: "Guitar",
+    role: "Lead Guitar",
     bio: '"I play guitar because I suck at drums"',
     image: "/jason-band-photo.jpg",
   },
   {
     name: "Aaron",
-    role: "Vocals/Guitar",
+    role: "Vocals/Rhythm Guitar",
     bio: '"I don\'t know what to do with my hands."',
     image: "/aaron-band-photo.jpg",
   },

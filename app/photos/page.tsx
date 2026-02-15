@@ -1,22 +1,50 @@
 import { supabaseAdmin, Photo } from "@/lib/supabase";
-import Image from "next/image";
+import PhotosGallery from "./PhotosGallery";
 
-async function getPhotos() {
-  const { data: photos, error } = await supabaseAdmin
-    .from("photos")
-    .select("*")
-    .order("created_at", { ascending: false });
+const IMAGE_EXT = /\.(jpg|jpeg|png|gif|webp|avif)$/i;
 
-  if (error) {
-    console.error("Error fetching photos:", error);
+async function getPhotosFromBucket(): Promise<Photo[]> {
+  try {
+    const { data: files, error } = await supabaseAdmin.storage
+      .from("photos")
+      .list("", { limit: 1000 });
+
+    if (error) {
+      console.error("Error listing photos bucket:", error);
+      return [];
+    }
+
+    const imageFiles = (files ?? []).filter(
+      (f) => !f.name.endsWith("/") && IMAGE_EXT.test(f.name)
+    );
+
+    const photos: Photo[] = imageFiles.map((file) => {
+      const { data } = supabaseAdmin.storage
+        .from("photos")
+        .getPublicUrl(file.name);
+      return {
+        id: file.name,
+        url: data.publicUrl,
+        caption: undefined,
+        created_at: file.created_at ?? new Date().toISOString(),
+      };
+    });
+
+    // Newest first (by created_at if present, else by name)
+    photos.sort((a, b) => {
+      const tA = new Date(a.created_at).getTime();
+      const tB = new Date(b.created_at).getTime();
+      return tB - tA;
+    });
+
+    return photos;
+  } catch {
     return [];
   }
-
-  return photos as Photo[];
 }
 
 export default async function PhotosPage() {
-  const photos = await getPhotos();
+  const photos = await getPhotosFromBucket();
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -24,31 +52,7 @@ export default async function PhotosPage() {
         Photos
       </h1>
 
-      {photos.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {photos.map((photo) => (
-            <div key={photo.id} className="y2k-card overflow-hidden">
-              <div className="relative w-full h-64">
-                <Image
-                  src={photo.url}
-                  alt={photo.caption || "Band photo"}
-                  fill
-                  className="object-cover rounded-lg"
-                />
-              </div>
-              {photo.caption && (
-                <p className="mt-3 text-center text-primary-light">
-                  {photo.caption}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center text-gray-400">
-          <p>No photos yet. Check back soon!</p>
-        </div>
-      )}
+      <PhotosGallery photos={photos} />
     </div>
   );
 }

@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     // Send email notification
     try {
       await resend.emails.send({
-        from: "HeyBuddy Website <onboarding@resend.dev>",
+        from: "HeyBuddy Website <noreply@contact.heybuddyband.com>",
         to: process.env.CONTACT_EMAIL!,
         subject: `New Contact Form Submission from ${name}`,
         html: `

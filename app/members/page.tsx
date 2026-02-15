@@ -2,16 +2,16 @@ import Image from "next/image";
 
 const members = [
   {
+    name: "Jason",
+    role: "Guitar",
+    bio: '"I play guitar because I suck at drums"',
+    image: "/jason-band-photo.jpg",
+  },
+  {
     name: "Aaron",
     role: "Vocals/Guitar",
     bio: '"I don\'t know what to do with my hands."',
     image: "/aaron-band-photo.jpg",
-  },
-  {
-    name: "Matthew",
-    role: "Bass",
-    bio: '"I just wanted to be different."',
-    image: "/matthew-band-photo.jpg",
   },
   {
     name: "Ethan",
@@ -20,10 +20,10 @@ const members = [
     image: "/ethan-band-photo.jpg",
   },
   {
-    name: "Jason",
-    role: "Guitar",
-    bio: '"I play guitar because I suck at drums"',
-    image: "/jason-band-photo.jpg",
+    name: "Matt",
+    role: "Bass",
+    bio: '"I just wanted to be different."',
+    image: "/matthew-band-photo.jpg",
   },
 ];
 
